@@ -21,7 +21,7 @@ func main() {
 	defer db.Close()
 
 	// Dependency injection
-	noteRepo := repository.NewMysqlNoteRepository(db)
+	noteRepo := repository.NewPostgresNoteRepository(db)
 	noteService := service.NewNoteService(noteRepo)
 	noteHandler := handler.NewNoteHandler(noteService)
 
