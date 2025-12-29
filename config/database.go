@@ -24,6 +24,20 @@ func ConnectDB() (*sql.DB, error) {
 		if err = db.Ping(); err != nil {
 			return nil, err
 		}
+		
+		// Auto-create table
+		createTable := `CREATE TABLE IF NOT EXISTS notes (
+			id SERIAL PRIMARY KEY,
+			title VARCHAR(255) NOT NULL,
+			content TEXT NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		);`
+		_, err = db.Exec(createTable)
+		if err != nil {
+			return nil, err
+		}
+		
 		return db, nil
 	}
 
