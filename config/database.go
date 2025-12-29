@@ -25,18 +25,20 @@ func ConnectDB() (*sql.DB, error) {
 			return nil, err
 		}
 		
-		// Auto-create table
+		// Auto-create table with better error handling
 		createTable := `CREATE TABLE IF NOT EXISTS notes (
 			id SERIAL PRIMARY KEY,
-			title VARCHAR(255) NOT NULL,
+			title TEXT NOT NULL,
 			content TEXT NOT NULL,
-			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-		);`
+			created_at TIMESTAMP DEFAULT NOW(),
+			updated_at TIMESTAMP DEFAULT NOW()
+		)`
 		_, err = db.Exec(createTable)
 		if err != nil {
+			fmt.Printf("Error creating table: %v\n", err)
 			return nil, err
 		}
+		fmt.Println("Table 'notes' created or already exists")
 		
 		return db, nil
 	}
